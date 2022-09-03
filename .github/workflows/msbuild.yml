@@ -1,0 +1,58 @@
+name: MSBuild
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  BUILD_CONFIGURATION: Release
+
+permissions: write-all
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.2
+
+    - name: MakeDirs
+      run: |
+        mkdir build
+        mkdir temp
+        mkdir temp/Modloader/mods
+        mkdir temp/Modloader/config
+
+    - name: Build
+      run: |
+        cmake -S . -B build/
+        cmake --build build/ --config ${{env.BUILD_CONFIGURATION}}
+
+    - name: MoveToTemp
+      run: |
+        mv build/bin/Release/* temp/Modloader/mods/
+        mv build/bin/Shipworks.json temp/Modloader/config/
+      
+    - name: Upload
+      uses: actions/upload-artifact@v3.1.0
+      with:
+        name: Artifacts
+        path: temp/*
+
+    - name: Zip
+      uses: vimtor/action-zip@v1
+      with:
+        files: temp/
+        recursive: true
+        dest: Artifacts.zip
+      if: startsWith(github.ref, 'refs/tags/')
+        
+    - name: Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v0.1.14
+      with:
+        files: Artifacts.zip

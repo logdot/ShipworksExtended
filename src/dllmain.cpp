@@ -26,7 +26,7 @@ void Inject()
     CreateLibraries();
 
     // FIX: This will crash if shipyard.json does not exist
-    std::ifstream f("Shipworks.json");
+    std::ifstream f("Modloader/config/Shipworks.json");
     json data = json::parse(f);
 
     if (data["LoadVanilla"] == true)
