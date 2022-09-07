@@ -52,8 +52,15 @@ CreateLibrary PROC
     push rbx
     mov rbx, [rcx]
     test rbx, rbx
+    jmp noDeconstruct
     jz noDeconstruct
     mov rax, [rbx]
+    ;; This calls the function at 14025e320, which reads the vftable at rcx
+    ;; (which normally is just the vftable of the object that called it) and
+    ;; calls the function at 14025E330, which I'm not sure what it does. When
+    ;; using the modloader rcx is a garbage value, causing it to try calling
+    ;; into random memory. For now I'm just skipping calling this function, as
+    ;; it doesn't seem to affect the game at all.
     call qword ptr [rax+48h]
 noDeconstruct:
     ;; Save our parameters
