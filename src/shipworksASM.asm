@@ -1,10 +1,10 @@
 .data
 ; External functions
-New             QWORD 140309078h
-CreateLibraryEx QWORD 14025cf50h
-MakeGlobalEx    QWORD 140187120h
-CopyStringEx    QWORD 1400051c0h
-DefinePartEx    QWORD 1401FDE40h
+New             QWORD 140334094h
+CreateLibraryEx QWORD 14027f200h
+MakeGlobalEx    QWORD 140194de0h
+CopyStringEx    QWORD 1400056e0h
+DefinePartEx    QWORD 14021b190h
 
 EditorParts     QWORD 143942568h ; Object to the object that holds all editor parts
 
