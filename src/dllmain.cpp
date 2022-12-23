@@ -106,7 +106,7 @@ DWORD WINAPI HackThread(HMODULE hModule)
     std::cout << "Game Base: " << gameBase << std::endl;
     std::cout << "Injected Function Base: " << Inject << std::endl;
 
-    BYTE *injectAddr = (BYTE *)0x1400cbbcd;
+    BYTE *injectAddr = (BYTE *)0x1400d0add;
     mem::Patch(injectAddr, (BYTE *)"\xff\x15\x02\x00\x00\x00\xeb\x08", 8); // Patch the absolute call bytes
     void *temp = &Inject;
     mem::Patch(injectAddr + 8, (BYTE *)(&temp), 8);                     // Patch the address of the call (Inject)

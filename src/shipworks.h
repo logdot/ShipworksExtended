@@ -3,23 +3,23 @@
 
 typedef DWORD64 pointer;
 
-static const DWORD64 EditorParts = 0x143942568;
+static const DWORD64 EditorParts = 0x143a139f0;
 
 enum EditorLibraries : DWORD64 {
-	HullLibrary = 0x14038d420,
-	ArmorLibrary = 0x14038d438,
-	FuelLibrary = 0x14038d450,
-	AmmoLibrary = 0x14038d468,
-	LegLibrary = 0x14038d480,
-	EngineLibrary = 0x14038d498,
-	GunLibrary = 0x14038d4b0,
-	SensorLibrary = 0x14038d4c8,
-	ExpendablesLibrary = 0x14038d4e0,
-	CraftLibrary = 0x14038d4f8,
-	DefencesLibrary = 0x14038d510,
-	GeneratorLibrary = 0x14038d528,
-	QuartersLibrary = 0x14038d540,
-	EmergencyLibrary = 0x14038d558
+	HullLibrary = 0x1403bd400,
+	ArmorLibrary = 0x1403bd418,
+	FuelLibrary = 0x1403bd430,
+	AmmoLibrary = 0x1403bd448,
+	LegLibrary = 0x1403bd460,
+	EngineLibrary = 0x1403bd478,
+	GunLibrary = 0x1403bd490,
+	SensorLibrary = 0x1403bd4a8,
+	ExpendablesLibrary = 0x1403bd4c0,
+	CraftLibrary = 0x1403bd4d8,
+	DefencesLibrary = 0x1403bd4f0,
+	GeneratorLibrary = 0x1403bd508,
+	QuartersLibrary = 0x1403bd520,
+	EmergencyLibrary = 0x1403bd538
 };
 
 extern "C" {
