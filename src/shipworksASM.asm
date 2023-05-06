@@ -18,7 +18,7 @@ DefinePart PROC
     mov r8, [r8]
     mov rcx, [rcx]
     call DefinePartEx
-    mov dword ptr [rax+798h], 3E7h
+    mov dword ptr [rax+7a8h], 3E7h
     add rsp, 72
     ret
 DefinePart ENDP 
