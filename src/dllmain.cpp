@@ -1,6 +1,7 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include "pch.h"
 #include "mem.h"
+#include "teebuf.h"
 #include "shipworks.h"
 #include <windows.h>
 #include <iostream>
@@ -86,6 +87,11 @@ DWORD WINAPI HackThread(HMODULE hModule)
     AllocConsole();
     FILE *f;
     freopen_s(&f, "CONOUT$", "w", stdout);
+
+    std::ofstream logFile("Modloader/shipworks.txt");
+    teebuf teebuf(std::cout.rdbuf(), logFile.rdbuf());
+    std::ostream out(&teebuf);
+    std::cout.rdbuf(&teebuf);
 
     std::cout << "------------------------------------------------" << std::endl;
     std::cout << "/\\/\\/ Welcome to Shipyard part loader \\/\\/\\" << std::endl;
