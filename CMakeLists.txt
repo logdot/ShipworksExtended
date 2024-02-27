@@ -16,6 +16,7 @@ set(SHIPWORKS_EXTENDED_SOURCE
         src/mem.cpp
         src/pch.cpp
         src/shipworks.cpp
+        src/teebuf.cpp
         src/shipworksASM.asm)
 
 project(ShipworksExtended VERSION 0.1.1)
