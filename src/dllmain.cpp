@@ -6,7 +6,7 @@
 #include <windows.h>
 #include <iostream>
 #include <string>
-#include <TlHelp32.h>
+#include <tlhelp32.h>
 #include <fstream>
 #include "json.hpp"
 
@@ -114,7 +114,7 @@ DWORD WINAPI HackThread(HMODULE hModule)
 
     BYTE *injectAddr = (BYTE *)0x1400d0add;
     mem::Patch(injectAddr, (BYTE *)"\xff\x15\x02\x00\x00\x00\xeb\x08", 8); // Patch the absolute call bytes
-    void *temp = &Inject;
+    void *temp = (void*)&Inject;
     mem::Patch(injectAddr + 8, (BYTE *)(&temp), 8);                     // Patch the address of the call (Inject)
     mem::Patch(injectAddr + 16, (BYTE *)"\x48\x83\xc4\x20\x5b\xc3", 6); // Patch the epilogue
 
