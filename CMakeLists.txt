@@ -1,4 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
+project(ShipworksExtended VERSION 0.1.1)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -16,8 +18,12 @@ set(SHIPWORKS_EXTENDED_SOURCE
         src/teebuf.cpp
         src/stubs.cpp)
 
-project(ShipworksExtended VERSION 0.1.1)
 add_library(${PROJECT_NAME} SHARED ${SHIPWORKS_EXTENDED_SOURCE})
+
+# Static linking for MinGW (avoids Wine runtime conflicts)
+if(MINGW)
+    target_link_options(${PROJECT_NAME} PRIVATE -static -static-libgcc -static-libstdc++)
+endif()
 
 add_custom_command(
         TARGET ${PROJECT_NAME} POST_BUILD
