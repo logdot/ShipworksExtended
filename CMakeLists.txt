@@ -1,13 +1,12 @@
 cmake_minimum_required(VERSION 3.10)
+project(ShipworksExtended VERSION 0.1.1)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-enable_language(CXX ASM_MASM)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-
 
 include_directories(libs/json)
 
@@ -17,10 +16,14 @@ set(SHIPWORKS_EXTENDED_SOURCE
         src/pch.cpp
         src/shipworks.cpp
         src/teebuf.cpp
-        src/shipworksASM.asm)
+        src/stubs.cpp)
 
-project(ShipworksExtended VERSION 0.1.1)
 add_library(${PROJECT_NAME} SHARED ${SHIPWORKS_EXTENDED_SOURCE})
+
+# Static linking for MinGW (avoids Wine runtime conflicts)
+if(MINGW)
+    target_link_options(${PROJECT_NAME} PRIVATE -static -static-libgcc -static-libstdc++)
+endif()
 
 add_custom_command(
         TARGET ${PROJECT_NAME} POST_BUILD
