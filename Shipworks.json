@@ -55,5 +55,13 @@
 	"LoadVanillaEmergency": true,
 	"Emergency": [
 
-	]
+	],
+	"CustomMenus": [
+
+	],
+	"Hooks": {
+		"PartMenu": true,
+		"Click": true,
+		"Layout": true
+	}
 }

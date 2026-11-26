@@ -1,24 +1,32 @@
-cmake_minimum_required(VERSION 3.10)
-project(ShipworksExtended VERSION 0.1.1)
+cmake_minimum_required(VERSION 3.16)
+project(ShipworksExtended VERSION 0.2.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-include_directories(libs/json)
-
-set(SHIPWORKS_EXTENDED_SOURCE
+add_library(${PROJECT_NAME} SHARED
+        src/crash.cpp
         src/dllmain.cpp
+        src/game.cpp
+        src/hook.cpp
+        src/log.cpp
         src/mem.cpp
-        src/pch.cpp
-        src/shipworks.cpp
-        src/teebuf.cpp
-        src/stubs.cpp)
+        src/menus.cpp
+        src/palettes.cpp)
 
-add_library(${PROJECT_NAME} SHARED ${SHIPWORKS_EXTENDED_SOURCE})
+target_include_directories(${PROJECT_NAME} PRIVATE libs/json src)
+
+# MinGW would otherwise call the output libShipworksExtended.dll.
+set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
+
+if(MSVC)
+    target_compile_options(${PROJECT_NAME} PRIVATE /W4 /permissive- /utf-8)
+endif()
 
 # Static linking for MinGW (avoids Wine runtime conflicts)
 if(MINGW)
