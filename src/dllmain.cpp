@@ -4,6 +4,7 @@
 #include "teebuf.h"
 #include "shipworks.h"
 #include <windows.h>
+#include <cstring>
 #include <iostream>
 #include <string>
 #include <tlhelp32.h>
@@ -113,6 +114,10 @@ DWORD WINAPI HackThread(HMODULE hModule)
     std::cout << "Injected Function Base: " << Inject << std::endl;
 
     BYTE *injectAddr = (BYTE *)0x1400d0add;
+    // Save the full patch span (8-byte call stub, 8-byte target, 6-byte epilogue).
+    // The original allocator call's displacement differs between game builds.
+    BYTE originalBytes[22];
+    std::memcpy(originalBytes, injectAddr, sizeof(originalBytes));
     mem::Patch(injectAddr, (BYTE *)"\xff\x15\x02\x00\x00\x00\xeb\x08", 8); // Patch the absolute call bytes
     void *temp = (void*)&Inject;
     mem::Patch(injectAddr + 8, (BYTE *)(&temp), 8);                     // Patch the address of the call (Inject)
@@ -133,8 +138,7 @@ DWORD WINAPI HackThread(HMODULE hModule)
         Sleep(5);
     }
 
-    // Unpatch
-    mem::Patch(injectAddr, (BYTE *)"\x74\x06\x48\x8b\x01\xff\x50\x48\xb9\x28\x01\x00\x00\xe8\x99\xd4\x23\x00\x48\x89\x44\x24", 22); // Replace the overriden bytes back to normal
+    mem::Patch(injectAddr, originalBytes, sizeof(originalBytes));
 
     fclose(f);
     FreeConsole();
