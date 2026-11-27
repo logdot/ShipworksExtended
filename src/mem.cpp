@@ -1,16 +1,19 @@
-#include "pch.h"
 #include "mem.h"
 
-void mem::Patch(BYTE* dst, BYTE* src, unsigned int size) {
-	DWORD oldprotect;
-	VirtualProtect(dst, size, PAGE_EXECUTE_READWRITE, &oldprotect);
-	memcpy(dst, src, size);
-	VirtualProtect(dst, size, oldprotect, &oldprotect);
-}
+#include <windows.h>
 
-void mem::Nop(BYTE* dst, unsigned int size) {
-	DWORD oldprotect;
-	VirtualProtect(dst, size, PAGE_EXECUTE_READWRITE, &oldprotect);
-	memset(dst, 0x90, size);
-	VirtualProtect(dst, size, oldprotect, &oldprotect);
+#include <cstring>
+
+bool mem::Patch(void* dst, const void* src, std::size_t size) noexcept {
+    DWORD previous = 0;
+    if (VirtualProtect(dst, size, PAGE_EXECUTE_READWRITE, &previous) == FALSE) {
+        return false;
+    }
+
+    std::memcpy(dst, src, size);
+    FlushInstructionCache(GetCurrentProcess(), dst, size);
+
+    DWORD ignored = 0;
+    VirtualProtect(dst, size, previous, &ignored);
+    return true;
 }
